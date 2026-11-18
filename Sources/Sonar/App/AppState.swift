@@ -12,7 +12,7 @@ enum SidebarItem: String, CaseIterable, Identifiable {
         case .share: return "Share to phone"
         case .logs: return "Logs"
         case .settings: return "Settings"
-        case .donate: return "Donate"
+        case .donate: return "Buy me a coffee"
         }
     }
     var icon: String {
@@ -23,7 +23,7 @@ enum SidebarItem: String, CaseIterable, Identifiable {
         case .share: return "iphone.radiowaves.left.and.right"
         case .logs: return "text.alignleft"
         case .settings: return "gearshape"
-        case .donate: return "heart"
+        case .donate: return "cup.and.saucer"
         }
     }
 }

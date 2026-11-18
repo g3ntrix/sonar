@@ -256,32 +256,9 @@ struct SettingsView: View {
                 }
                 Link("Releases page", destination: Brand.releasesURL)
             }
-            Section {
-                portRow("SOCKS5", app.stored.tunnel.socksPort)
-                portRow("SOCKS5 (second)", app.stored.tunnel.socks2Port)
-                portRow("HTTP", app.stored.tunnel.httpPort)
-                portRow("Phone sharing", app.stored.tunnel.lanPort)
-            } header: {
-                Text("Ports")
-            } footer: {
-                Text("Apps on this Mac connect to 127.0.0.1 on these ports.").font(.caption).foregroundStyle(.secondary)
-            }
-            Section("Speed limits") {
-                LabeledContent("Upload", value: "\(app.stored.tunnel.brutalUpMbps) Mbps")
-                LabeledContent("Download", value: "\(app.stored.tunnel.brutalDownMbps) Mbps")
-            }
         }
         .formStyle(.grouped)
         .padding(12)
-    }
-
-    private func portRow(_ title: String, _ port: Int) -> some View {
-        LabeledContent(title) {
-            HStack(spacing: 4) {
-                Text(String(port)).font(.system(.body, design: .monospaced)).textSelection(.enabled)
-                CopyIconButton(text: String(port), help: "Copy port")
-            }
-        }
     }
 }
 
