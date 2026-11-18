@@ -144,7 +144,7 @@ struct ProgressRing: View {
     }
 }
 
-// MARK: - Sonar ping animation (success micro-animation and brand)
+// MARK: - Ping animation
 
 struct SonarPulse: View {
     var color: Color = Brand.accent
@@ -171,7 +171,7 @@ struct SonarPulse: View {
     }
 }
 
-// MARK: - Paste box ("paste back, do not type")
+// MARK: - Paste box
 
 struct PasteBox: View {
     let prompt: String
@@ -248,7 +248,7 @@ struct ErrorCard: View {
     }
 }
 
-// MARK: - Help popover ("why")
+// MARK: - Help popover
 
 struct WhyButton: View {
     let text: String
@@ -276,7 +276,7 @@ struct DisclosureWhy: View {
 
 // MARK: - Throughput chart
 
-/// A small live chart: filled area for download, a line for upload. No axes; reads as a glanceable trend.
+/// Live speed chart: filled area for download, a line for upload.
 struct ThroughputChart: View {
     let samples: [Engine.Sample]
     var downColor: Color = Brand.accent

@@ -17,7 +17,7 @@ needles+=("BEGIN RSA PRIVATE KEY" "BEGIN OPENSSH PRIVATE KEY")
 if [ -f "$ROOT/.private/leak-needles.txt" ]; then
   while IFS= read -r v; do [[ -z "$v" || "$v" == \#* ]] && continue; add "$v"; done < "$ROOT/.private/leak-needles.txt"
 fi
-targets=("$ROOT/Sources" "$ROOT/Helpers" "$ROOT/Tests" "$ROOT/scripts" "$ROOT/Package.swift" "$ROOT/README.md" "$ROOT/CHANGELOG.md" "$ROOT/docs/FIRST_LAUNCH.txt" "$ROOT/docs/RELEASES_README.md")
+targets=("$ROOT/Sources" "$ROOT/Helpers" "$ROOT/Tests" "$ROOT/scripts" "$ROOT/Package.swift" "$ROOT/README.md" "$ROOT/CHANGELOG.md" "$ROOT/docs/FIRST_LAUNCH.txt")
 [ -d "$ROOT/dist" ] && targets+=("$ROOT/dist")
 # ALL=1: also scan every other tracked file (docs, logo, reference/).
 if [ "${ALL:-0}" = 1 ]; then

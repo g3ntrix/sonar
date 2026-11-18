@@ -1,61 +1,104 @@
-# Sonar
+<p align="center">
+  <img src="logo/sonar.png" width="112" alt="Sonar icon">
+</p>
 
-A macOS app that connects your Mac, and your phone through it, to your own VPS on networks that block UDP and
-throttle TCP. A guided setup takes you from a fresh Ubuntu/Debian server to a working connection: you paste one
-command on the server and Sonar does the rest.
+<h1 align="center">Sonar</h1>
 
-- macOS 13+, Apple silicon and Intel
-- Local proxies: SOCKS5 `127.0.0.1:10808` and `10809`, HTTP `10810`, optional Wi-Fi sharing for a phone on `10811`
-- Downloads: [Releases](https://github.com/g3ntrix/sonar-releases/releases)
+<p align="center">
+  <b>A private connection to your own server, for networks where other tools fail.</b><br>
+  For macOS, and your phone through your Mac.
+</p>
 
-## How it works
+<p align="center">
+  <a href="https://github.com/g3ntrix/sonar/releases/latest"><b>Download for Mac</b></a>
+  &nbsp;·&nbsp; macOS 13 or newer &nbsp;·&nbsp; Apple silicon and Intel
+</p>
 
-```
-apps -> Xray (SOCKS/HTTP) -> Hysteria2 client -> 127.0.0.1:18096 (UDP)
-     -> relayd (ICMP echo, unprivileged socket) -> your VPS: sonar_link.py -> Hysteria2 server -> internet
-```
+<p align="center">
+  <img src="docs/screenshots/dashboard.png" width="49%" alt="Sonar dashboard, connected">
+  <img src="docs/screenshots/connection-test.png" width="49%" alt="Sonar connection test, everything works">
+</p>
 
-Hysteria2 traffic is carried inside ICMP echo packets, which many restrictive networks still let through. The app
-generates all passwords and the certificate itself, so the server install is a single command that can be run again
-at any time.
+## What it does
 
-## Layout
+Some networks block or throttle almost everything: VPNs stall, proxies drop, speeds crawl. Sonar connects your Mac to
+a small server you own, in a way that still gets through on many of those networks.
 
-| Path | What |
+You don't need to know anything about networking. A step-by-step setup takes you from "I have a server" to a working
+connection in a few minutes.
+
+## Get started
+
+1. **Download** the `.dmg` from [Releases](https://github.com/g3ntrix/sonar/releases/latest), open it and drag
+   **Sonar** into **Applications**.
+2. **Open Sonar.** If macOS says it can't open it, go to **System Settings → Privacy & Security**, scroll down and
+   click **Open Anyway**. (Sonar isn't notarized by Apple, so macOS asks once.)
+3. **Follow the setup.** Enter your server's IP, paste the one command Sonar gives you into your server, and wait for
+   the green check.
+4. **Press the big button** to connect.
+
+### What you need
+
+- A small Linux server (VPS) running **Ubuntu or Debian**. The cheapest plan is enough: Hetzner, DigitalOcean, Vultr
+  and others work.
+- A way to log in to it. Your provider shows you how when you create it.
+
+## Features
+
+- **One-paste server setup** with live checks, and help for your provider's firewall
+- **Whole-Mac proxy** with one switch, or use the local SOCKS5/HTTP proxy in the apps you choose
+- **Share to phone** by scanning a QR code (V2Box, v2rayNG, NekoRay). Phone and Mac must be on the same Wi-Fi
+- **Connection test** that checks every step and tells you what's wrong in plain words
+- **Live speed** and connection health on the dashboard, plus a menu bar icon
+- **Several servers**, and a quick fix when your server's IP changes
+
+On networks where UDP works, try [Veil](https://github.com/g3ntrix/veil), Sonar's faster sibling.
+
+## Privacy
+
+No ads, no accounts, no tracking. Passwords and keys are created on your Mac and stay there. Sonar only talks to your
+own server, and to GitHub to check for updates.
+
+## Buy me a coffee
+
+Sonar is free. If it's useful to you, a coffee helps support its development:
+
+| Coin | Address |
 |---|---|
-| `Sources/Sonar/App` | App entry, branding, app state |
-| `Sources/Sonar/Shared` | Models, secret store, Xray config, engine, connection tester, server script, proxy helper, UI components |
-| `Sources/Sonar/Views` | Setup wizard, dashboard, tester, servers, share, logs, settings, donate, menu bar |
-| `Sources/Sonar/Resources/Server` | `install.sh`, `check.sh`, `sonar_link.py`, embedded into the install command |
-| `Helpers/relayd` | Go helper: `run` (transport), `check`, `net`, `watch` |
-| `reference/` | Original Python prototype of the relay |
-| `scripts/` | Build, DMG, release and leak-check scripts |
+| USDT (BEP20) | `0x71F41696c60C4693305e67eE3Baa650a4E3dA796` |
+| TON | `UQCriHkMUa6h9oN059tyC23T13OsQhGGM3hUS2S4IYRBZgvx` |
+| TRX (TRON) | `TFrCzU7bDey9WSh3fhqCBqhaiMzr8VhcUV` |
 
-## Build
+<details>
+<summary><b>Building from source</b></summary>
 
 Requires Xcode 15+ (Swift 5.9) and Go 1.26+.
 
-```
-./scripts/build-app.sh        # dist/Sonar.app (universal, ad-hoc signed)
-./scripts/make-dmg.sh         # dist/Sonar-<version>.dmg
-./scripts/build-release.sh    # builds, writes notes with SHA-256, asks before uploading
+```bash
+./scripts/build-app.sh       # dist/Sonar.app (universal, ad-hoc signed)
+./scripts/make-dmg.sh        # dist/Sonar-<version>.dmg
 ```
 
 Tests: `swift test` and `cd Helpers/relayd && go test ./...`. The version lives in `VERSION`.
 
-Run `./scripts/check-secrets.sh` before committing or releasing. Put your own server IPs, one per line, in
-`.private/leak-needles.txt` (untracked) so they can never end up in the repo.
+| Path | What |
+|---|---|
+| `Sources/Sonar/App` | App entry, branding, app state |
+| `Sources/Sonar/Shared` | Models, services and shared UI |
+| `Sources/Sonar/Views` | Setup, dashboard, test, servers, sharing, logs, settings |
+| `Sources/Sonar/Resources/Server` | Server install and check scripts |
+| `Helpers/relayd` | Go helper used by the app |
+| `scripts/` | Build, DMG and release scripts |
 
-## Known limits
+Run `./scripts/check-secrets.sh` before committing. Put your own server IPs, one per line, in
+`.private/leak-needles.txt` (untracked) so they never end up in the repo.
 
-- The server side serves one client at a time (one Mac; a phone goes through the Mac).
-- Releases are ad-hoc signed and not notarized. See `docs/FIRST_LAUNCH.txt`.
+Known limits: one Mac per server at a time (a phone connects through the Mac). Releases are ad-hoc signed and not
+notarized.
 
-## Donate
-
-USDT (BEP20) `0x71F41696c60C4693305e67eE3Baa650a4E3dA796` · TON `UQCriHkMUa6h9oN059tyC23T13OsQhGGM3hUS2S4IYRBZgvx` ·
-TRX `TFrCzU7bDey9WSh3fhqCBqhaiMzr8VhcUV`
+</details>
 
 ## License
 
-GPL-3.0. See `LICENSE`. The bundled Xray core is MPL-2.0 ([source](https://github.com/XTLS/Xray-core)).
+Free and open source under the [GPL-3.0](LICENSE). Made by [g3ntrix](https://github.com/g3ntrix).
+Includes [Xray-core](https://github.com/XTLS/Xray-core) (MPL-2.0).

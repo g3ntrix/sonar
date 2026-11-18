@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Builds the app and DMG, writes release notes with the SHA-256, and (only after you type "yes") uploads the DMG
-# as a GitHub release to the public releases-only repo.
+# as a GitHub release.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-REPO="${RELEASES_REPO:-g3ntrix/sonar-releases}"
+REPO="${RELEASES_REPO:-g3ntrix/sonar}"
 VERSION="$(cat "$ROOT/VERSION")"
 "$ROOT/scripts/build-app.sh"
 "$ROOT/scripts/make-dmg.sh"

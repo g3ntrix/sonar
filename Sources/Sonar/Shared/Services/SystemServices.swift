@@ -112,7 +112,7 @@ enum Notifier {
     }
 }
 
-/// Checks the public releases-only repo for a newer version. Fetches only the public releases feed.
+/// Checks GitHub releases for a newer version.
 enum UpdateService {
     struct Release: Equatable {
         var version: String
@@ -133,21 +133,6 @@ enum UpdateService {
               let html = (obj["html_url"] as? String).flatMap(URL.init(string:)) else { return .some(nil) }
         let v = tag.hasPrefix("v") ? String(tag.dropFirst()) : tag
         return .some(Release(version: v, url: html, notes: obj["body"] as? String ?? ""))
-    }
-
-    static func latest() async -> Release? {
-        guard let url = URL(string: "https://api.github.com/repos/\(Brand.releasesRepo)/releases/latest") else { return nil }
-        var req = URLRequest(url: url, timeoutInterval: 15)
-        req.setValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
-        req.setValue("Sonar-macOS", forHTTPHeaderField: "User-Agent")
-        guard let (data, resp) = try? await URLSession.shared.data(for: req),
-              (resp as? HTTPURLResponse)?.statusCode == 200,
-              let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let tag = obj["tag_name"] as? String,
-              let html = (obj["html_url"] as? String).flatMap(URL.init(string:))
-        else { return nil }
-        let v = tag.hasPrefix("v") ? String(tag.dropFirst()) : tag
-        return Release(version: v, url: html, notes: obj["body"] as? String ?? "")
     }
 
     static func isNewer(_ a: String, than b: String) -> Bool {
