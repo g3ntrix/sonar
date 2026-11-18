@@ -1,0 +1,12 @@
+.DS_Store
+*.dmg
+*.env
+dist/
+.build/
+assets/
+bundle/
+
+# Local leak-check values
+.private/
+.swiftpm/
+*.xcuserstate

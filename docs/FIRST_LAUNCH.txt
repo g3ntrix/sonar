@@ -1,0 +1,16 @@
+Sonar: first launch
+===================
+
+1. Drag Sonar into the Applications folder.
+2. Open Sonar from Applications.
+3. If macOS says Sonar "cannot be opened" or "is damaged":
+   - Open System Settings > Privacy & Security.
+   - Scroll down to the message about Sonar and click "Open Anyway", then confirm.
+   (On recent macOS the old right-click > Open shortcut no longer skips this check.)
+4. If that message does not appear, open Terminal and run:
+       xattr -dr com.apple.quarantine /Applications/Sonar.app
+   then open Sonar again.
+
+Why: Sonar is signed ad hoc, not with an Apple Developer ID, and is not notarized by Apple.
+macOS therefore cannot vouch for it. You install it at your own risk. Sonar sends no telemetry;
+it only contacts your own server and, to check for updates, the public GitHub releases page.
