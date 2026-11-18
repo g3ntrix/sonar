@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+- Sonar no longer opens a second window from the menu bar.
+- Settings opens right away.
+
 ## 0.1.0
 - First version: a private connection to your own server for networks that block UDP.
 - Guided setup with live checks, one-paste server install, cloud firewall help.
