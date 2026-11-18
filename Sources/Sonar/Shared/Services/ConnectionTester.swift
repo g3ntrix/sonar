@@ -23,7 +23,9 @@ final class ConnectionTester: ObservableObject {
     @Published private(set) var stages: [Stage] = ConnectionTester.titles.enumerated().map { Stage(id: $0.offset, title: $0.element) }
     @Published private(set) var running = false
     @Published private(set) var finished: Date?
-    var includeSpeed = true
+    @Published var includeSpeed = UserDefaults.standard.object(forKey: "includeSpeedTests") as? Bool ?? true {
+        didSet { UserDefaults.standard.set(includeSpeed, forKey: "includeSpeedTests") }
+    }
 
     enum Summary { case none, green, amber, red }
     var summary: Summary {

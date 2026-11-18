@@ -45,7 +45,7 @@ struct TesterPanel: View {
                 }
                 Spacer()
                 if !compact {
-                    Toggle("Speed tests", isOn: Binding(get: { tester.includeSpeed }, set: { tester.includeSpeed = $0 }))
+                    Toggle("Speed tests", isOn: $tester.includeSpeed)
                         .toggleStyle(.checkbox).help("Downloads about 36 MB through the tunnel")
                 }
                 if tester.finished != nil {
