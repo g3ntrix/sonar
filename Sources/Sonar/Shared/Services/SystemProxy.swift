@@ -20,6 +20,16 @@ enum ProxyHelper {
         }
     }
 
+    /// Quick check (files only), safe on the main thread.
+    static var looksInstalled: Bool {
+        FileManager.default.isExecutableFile(atPath: helperPath) && FileManager.default.fileExists(atPath: sudoersPath)
+    }
+
+    /// Full check off the main thread.
+    static func checkInstalled() async -> Bool {
+        await Task.detached { isInstalled() }.value
+    }
+
     static func isInstalled() -> Bool {
         let fm = FileManager.default
         guard fm.isExecutableFile(atPath: helperPath), fm.fileExists(atPath: sudoersPath) else { return false }

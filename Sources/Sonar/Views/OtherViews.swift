@@ -218,8 +218,8 @@ struct LogsView: View {
 struct SettingsView: View {
     @EnvironmentObject var app: AppState
     @EnvironmentObject var engine: Engine
-    @State private var helperInstalled = ProxyHelper.isInstalled()
-    @State private var loginOn = LoginItem.isEnabled
+    @State private var helperInstalled = ProxyHelper.looksInstalled
+    @State private var loginOn = false
     @State private var checkingUpdate = false
 
     var body: some View {
@@ -227,12 +227,12 @@ struct SettingsView: View {
             Section("Connection") {
                 Toggle("Use Sonar for the whole Mac (system SOCKS and HTTP proxy)", isOn: Binding(get: { app.stored.systemProxy }, set: { v in Task { await app.setSystemProxy(v) } }))
                 Toggle("Connect automatically when Sonar opens", isOn: $app.stored.autoConnect)
-                Toggle("Open Sonar at login", isOn: Binding(get: { loginOn }, set: { v in try? LoginItem.set(v); loginOn = LoginItem.isEnabled }))
+                Toggle("Open Sonar at login", isOn: Binding(get: { loginOn }, set: { v in loginOn = ((try? LoginItem.set(v)) != nil) ? v : LoginItem.isEnabled }))
                                 HStack {
                     Text(helperInstalled ? "Proxy helper installed. Turning the system proxy on or off won't ask for your password." : "The first time you turn on the system proxy, macOS asks for your password once to install a small helper.")
                         .font(.caption).foregroundStyle(.secondary)
                     Spacer()
-                    if helperInstalled { Button("Remove helper") { try? ProxyHelper.uninstall(); helperInstalled = ProxyHelper.isInstalled() }.controlSize(.small) }
+                    if helperInstalled { Button("Remove helper") { try? ProxyHelper.uninstall(); helperInstalled = ProxyHelper.looksInstalled }.controlSize(.small) }
                 }
             }
             Section("Updates") {
@@ -259,6 +259,10 @@ struct SettingsView: View {
         }
         .formStyle(.grouped)
         .padding(12)
+        .task {
+            loginOn = LoginItem.isEnabled
+            helperInstalled = await ProxyHelper.checkInstalled()
+        }
     }
 }
 
