@@ -7,7 +7,7 @@ struct SonarApp: App {
     @StateObject private var state = AppState()
 
     var body: some Scene {
-        WindowGroup("Sonar", id: "main") {
+        Window("Sonar", id: "main") {
             RootView()
                 .environmentObject(state)
                 .environmentObject(state.engine)
@@ -85,11 +85,7 @@ struct OpenPageCommand: View {
     var body: some View {
         Button(title) {
             state.selection = item
-            if let w = NSApp.windows.first(where: { $0.identifier?.rawValue.hasPrefix("main") == true && $0.canBecomeMain }) {
-                w.makeKeyAndOrderFront(nil)
-            } else {
-                openWindow(id: "main")
-            }
+            openWindow(id: "main")
             NSApp.activate(ignoringOtherApps: true)
         }
     }
